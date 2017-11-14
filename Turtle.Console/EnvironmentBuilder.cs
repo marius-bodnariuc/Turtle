@@ -73,7 +73,7 @@ where:
                         .PipeInto(line => (Direction)Enum.Parse(typeof(Direction), line, ignoreCase: true));
 
                     var mines = streamReader.ReadToEnd()
-                        .Split(new [] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+                        .Split(new [] { "\n" }, StringSplitOptions.RemoveEmptyEntries)
                         .Select(SplitLineIntoIntegerTokens)
                         .Select(PositionFromIntTokenPair)
                         .ToList();
