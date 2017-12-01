@@ -17,29 +17,42 @@ namespace Turtle
         private TurtleCommandBatch _commands;
 
         private TurtleState _turtleState;
+        private PositionType _currentPositionType;
         
         public Simulation(TurtleEnvironment environment, TurtleCommandBatch commandBatch)
         {
             _environment = environment;
             _commands = commandBatch;
+
+            _currentPositionType = PositionType.Clear;
+            _turtleState = new TurtleState(_environment.StartPosition, _environment.InitialDirection);
         }
 
         public SimulationResult Run()
         {
-            _turtleState = new TurtleState(_environment.StartPosition, _environment.InitialDirection);
-
-            var currentPositionType = PositionType.Clear;
             foreach (var command in _commands.Commands)
             {
-                currentPositionType = UpdateTurtleState(command);
-                if (currentPositionType != PositionType.Clear)
+                UpdateTurtleState(command);
+                UpdateCurrentPositionType();
+
+                if (_currentPositionType != PositionType.Clear)
                 {
                     break;
                 }
             }
 
-            var result = ToSimulationResult(currentPositionType);
+            var result = ToSimulationResult(_currentPositionType);
             return result;
+        }
+
+        private void UpdateCurrentPositionType()
+        {
+            _currentPositionType = _environment.GetPositionType(_turtleState.Position);
+        }
+
+        private void UpdateTurtleState(ITurtleCommand command)
+        {
+            _turtleState = TurtleController.ProcessCommand(_turtleState, command);
         }
 
         private static SimulationResult ToSimulationResult(PositionType positionType)
@@ -55,12 +68,6 @@ namespace Turtle
                 default:
                     return SimulationResult.StillInDanger;
             }
-        }
-
-        private PositionType UpdateTurtleState(ITurtleCommand command)
-        {
-            _turtleState = TurtleController.ProcessCommand(_turtleState, command);
-            return _environment.GetPositionType(_turtleState.Position);
         }
     }
 }
