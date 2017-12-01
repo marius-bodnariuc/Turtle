@@ -67,15 +67,15 @@ namespace Turtle
         {
             if (command is MoveTurtleCommand)
             {
-                _turtleState = Move(currentState, command);
+                _turtleState = Move(currentState, command as MoveTurtleCommand);
             }
             else
             {
-                _turtleState = Rotate(currentState, command);
+                _turtleState = Rotate(currentState, command as RotateTurtleCommand);
             }
         }
 
-        private TurtleState Move(TurtleState currentState, ITurtleCommand command)
+        private TurtleState Move(TurtleState currentState, MoveTurtleCommand command)
         {
             switch (currentState.Direction)
             {
@@ -91,7 +91,7 @@ namespace Turtle
             }
         }
 
-        private TurtleState Rotate(TurtleState currentState, ITurtleCommand command)
+        private TurtleState Rotate(TurtleState currentState, RotateTurtleCommand command)
         {
             switch (currentState.Direction)
             {
