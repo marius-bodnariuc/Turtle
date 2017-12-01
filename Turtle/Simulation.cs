@@ -1,4 +1,6 @@
-﻿namespace Turtle
+﻿using System;
+
+namespace Turtle
 {
     /// <summary>
     /// This class performs the whole simulation of the Turtle's itinerary.
@@ -78,7 +80,7 @@
             switch (currentState.Direction)
             {
                 case Direction.East:
-                    return new TurtleState(new Position(currentState.Position.X, currentState.Position.Y + 1), currentState.Direction);
+                    return MoveEast(currentState, command);
                 case Direction.West:
                     return new TurtleState(new Position(currentState.Position.X, currentState.Position.Y - 1), currentState.Direction);
                 case Direction.North:
@@ -104,5 +106,12 @@
                     return new TurtleState(currentState.Position, Direction.East);
             }
         }
+
+        Func<TurtleState, ITurtleCommand, TurtleState> MoveEast =>
+            (currentState, command) => new TurtleState(
+                new Position(currentState.Position.X, currentState.Position.Y + 1),
+                currentState.Direction);
+
+        // TODO extract Funcs for the other directions as well?
     }
 }
