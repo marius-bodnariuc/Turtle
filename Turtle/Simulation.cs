@@ -67,51 +67,12 @@ namespace Turtle
         {
             if (command is MoveTurtleCommand)
             {
-                _turtleState = Move(currentState, command as MoveTurtleCommand);
+                _turtleState = TurtleController.Move(currentState, command as MoveTurtleCommand);
             }
             else
             {
-                _turtleState = Rotate(currentState, command as RotateTurtleCommand);
+                _turtleState = TurtleController.Rotate(currentState, command as RotateTurtleCommand);
             }
         }
-
-        private TurtleState Move(TurtleState currentState, MoveTurtleCommand command)
-        {
-            switch (currentState.Direction)
-            {
-                case Direction.East:
-                    return MoveEast(currentState, command);
-                case Direction.West:
-                    return new TurtleState(new Position(currentState.Position.X, currentState.Position.Y - 1), currentState.Direction);
-                case Direction.North:
-                    return new TurtleState(new Position(currentState.Position.X - 1, currentState.Position.Y), currentState.Direction);
-                case Direction.South:
-                default:
-                    return new TurtleState(new Position(currentState.Position.X + 1, currentState.Position.Y), currentState.Direction);
-            }
-        }
-
-        private TurtleState Rotate(TurtleState currentState, RotateTurtleCommand command)
-        {
-            switch (currentState.Direction)
-            {
-                case Direction.East:
-                    return new TurtleState(currentState.Position, Direction.South);
-                case Direction.South:
-                    return new TurtleState(currentState.Position, Direction.West);
-                case Direction.West:
-                    return new TurtleState(currentState.Position, Direction.North);
-                case Direction.North:
-                default:
-                    return new TurtleState(currentState.Position, Direction.East);
-            }
-        }
-
-        Func<TurtleState, ITurtleCommand, TurtleState> MoveEast =>
-            (currentState, command) => new TurtleState(
-                new Position(currentState.Position.X, currentState.Position.Y + 1),
-                currentState.Direction);
-
-        // TODO extract Funcs for the other directions as well?
     }
 }

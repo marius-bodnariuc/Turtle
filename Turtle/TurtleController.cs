@@ -1,23 +1,46 @@
-﻿namespace Turtle
+﻿using System;
+
+namespace Turtle
 {
-    /// <summary>
-    /// This was used in the beginning, but I gave up on it,
-    /// as it felt like I was having one too many objects.
-    /// 
-    /// Left here for reference.
-    /// </summary>
-    internal class TurtleController
+    internal static class TurtleController
     {
-        private ITurtle _turtle;
-
-        public TurtleController(ITurtle turtle)
+        internal static TurtleState Move(TurtleState currentState, MoveTurtleCommand command)
         {
-            _turtle = turtle;
+            switch (currentState.Direction)
+            {
+                case Direction.East:
+                    return MoveEast(currentState, command);
+                case Direction.West:
+                    return new TurtleState(new Position(currentState.Position.X, currentState.Position.Y - 1), currentState.Direction);
+                case Direction.North:
+                    return new TurtleState(new Position(currentState.Position.X - 1, currentState.Position.Y), currentState.Direction);
+                case Direction.South:
+                default:
+                    return new TurtleState(new Position(currentState.Position.X + 1, currentState.Position.Y), currentState.Direction);
+            }
         }
 
-        public void ProcessCommand(ITurtleCommand command)
+        internal static TurtleState Rotate(TurtleState currentState, RotateTurtleCommand command)
         {
-            command.Execute(_turtle);
+            switch (currentState.Direction)
+            {
+                case Direction.East:
+                    return new TurtleState(currentState.Position, Direction.South);
+                case Direction.South:
+                    return new TurtleState(currentState.Position, Direction.West);
+                case Direction.West:
+                    return new TurtleState(currentState.Position, Direction.North);
+                case Direction.North:
+                default:
+                    return new TurtleState(currentState.Position, Direction.East);
+            }
         }
+
+        static Func<TurtleState, ITurtleCommand, TurtleState> MoveEast =>
+            (currentState, command) => new TurtleState(
+                new Position(currentState.Position.X, currentState.Position.Y + 1),
+                currentState.Direction);
+
+        // TODO extract Funcs for the other directions as well?
     }
 }
