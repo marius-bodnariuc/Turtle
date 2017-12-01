@@ -2,9 +2,20 @@
 {
     public class RotateTurtleCommand : ITurtleCommand
     {
-        public void Execute(ITurtle turtle)
+        public TurtleState Execute(TurtleState turtleState)
         {
-            turtle.Rotate();
+            switch (turtleState.Direction)
+            {
+                case Direction.East:
+                    return new TurtleState(turtleState.Position, Direction.South);
+                case Direction.South:
+                    return new TurtleState(turtleState.Position, Direction.West);
+                case Direction.West:
+                    return new TurtleState(turtleState.Position, Direction.North);
+                case Direction.North:
+                default:
+                    return new TurtleState(turtleState.Position, Direction.East);
+            }
         }
     }
 }

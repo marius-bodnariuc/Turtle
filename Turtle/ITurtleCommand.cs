@@ -2,6 +2,6 @@
 {
     public interface ITurtleCommand
     {
-        void Execute(ITurtle turtle);
+        TurtleState Execute(TurtleState turtleState);
     }
 }
