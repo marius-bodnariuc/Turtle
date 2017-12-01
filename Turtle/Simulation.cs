@@ -59,20 +59,8 @@ namespace Turtle
 
         private PositionType UpdateTurtleState(ITurtleCommand command)
         {
-            ProcessCommand(_turtleState, command);
+            _turtleState = TurtleController.ProcessCommand(_turtleState, command);
             return _environment.GetPositionType(_turtleState.Position);
-        }
-
-        private void ProcessCommand(TurtleState currentState, ITurtleCommand command)
-        {
-            if (command is MoveTurtleCommand)
-            {
-                _turtleState = TurtleController.Move(currentState, command as MoveTurtleCommand);
-            }
-            else
-            {
-                _turtleState = TurtleController.Rotate(currentState, command as RotateTurtleCommand);
-            }
         }
     }
 }

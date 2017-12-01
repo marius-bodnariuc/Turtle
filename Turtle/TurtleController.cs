@@ -4,7 +4,19 @@ namespace Turtle
 {
     internal static class TurtleController
     {
-        internal static TurtleState Move(TurtleState currentState, MoveTurtleCommand command)
+        internal static TurtleState ProcessCommand(TurtleState currentState, ITurtleCommand command)
+        {
+            if (command is MoveTurtleCommand)
+            {
+                return Move(currentState, command as MoveTurtleCommand);
+            }
+            else
+            {
+                return Rotate(currentState, command as RotateTurtleCommand);
+            }
+        }
+
+        private static TurtleState Move(TurtleState currentState, MoveTurtleCommand command)
         {
             switch (currentState.Direction)
             {
@@ -20,7 +32,7 @@ namespace Turtle
             }
         }
 
-        internal static TurtleState Rotate(TurtleState currentState, RotateTurtleCommand command)
+        private static TurtleState Rotate(TurtleState currentState, RotateTurtleCommand command)
         {
             switch (currentState.Direction)
             {
