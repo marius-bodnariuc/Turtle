@@ -56,12 +56,14 @@ where:
 
         private EnvironmentBuilder() { }
 
+        private EnvironmentBuilder(string path)
+        {
+            _path = path;
+        }
+
         public static EnvironmentBuilderFromFile From(string path)
         {
-            var builder = new EnvironmentBuilder();
-            builder._path = path;
-
-            return builder;
+            return new EnvironmentBuilder(path);
         }
 
         public EnvironmentBuilderWithIOErrorHandler OnIOError(Action<Exception> doThis)
