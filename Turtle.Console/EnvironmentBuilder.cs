@@ -5,7 +5,32 @@ using System.Linq;
 
 namespace Turtle.ConsoleApp
 {
-    class EnvironmentBuilder
+    interface EnvironmentBuilderFromFile
+    {
+        EnvironmentBuilderWithIOErrorHandler OnIOError(Action<Exception> errorHandler);
+        EnvironmentBuilderWithParsingErrorHandler OnParsingError(Action<Exception, string, string> errorHandler);
+    }
+
+    interface EnvironmentBuilderWithIOErrorHandler
+    {
+        EnvironmentBuilderWithIOAndParsingErrorHandler AndOnParsingError(Action<Exception, string, string> errorHandler);
+    }
+
+    interface EnvironmentBuilderWithParsingErrorHandler
+    {
+        EnvironmentBuilderWithIOAndParsingErrorHandler AndOnIOError(Action<Exception> errorHandler);
+    }
+
+    interface EnvironmentBuilderWithIOAndParsingErrorHandler
+    {
+        TurtleEnvironment Build();
+    }
+
+    class EnvironmentBuilder :
+        EnvironmentBuilderFromFile,
+        EnvironmentBuilderWithIOErrorHandler,
+        EnvironmentBuilderWithParsingErrorHandler,
+        EnvironmentBuilderWithIOAndParsingErrorHandler
     {
         private static readonly string ENV_FILE_FORMAT = @"[n] [m]
 [start_x] [start_y]
@@ -29,21 +54,35 @@ where:
         private Action<Exception> _onIoError;
         private Action<Exception, string, string> _onParsingError;
 
-        public EnvironmentBuilder() { }
+        private EnvironmentBuilder() { }
 
-        public EnvironmentBuilder From(string path)
+        public static EnvironmentBuilderFromFile From(string path)
         {
-            _path = path;
-            return this;
+            var builder = new EnvironmentBuilder();
+            builder._path = path;
+
+            return builder;
         }
 
-        public EnvironmentBuilder OnIOError(Action<Exception> doThis)
+        public EnvironmentBuilderWithIOErrorHandler OnIOError(Action<Exception> doThis)
         {
             _onIoError = doThis;
             return this;
         }
 
-        public EnvironmentBuilder OnParsingError(Action<Exception, string, string> doThis)
+        public EnvironmentBuilderWithParsingErrorHandler OnParsingError(Action<Exception, string, string> doThis)
+        {
+            _onParsingError = doThis;
+            return this;
+        }
+
+        public EnvironmentBuilderWithIOAndParsingErrorHandler AndOnIOError(Action<Exception> doThis)
+        {
+            _onIoError = doThis;
+            return this;
+        }
+
+        public EnvironmentBuilderWithIOAndParsingErrorHandler AndOnParsingError(Action<Exception, string, string> doThis)
         {
             _onParsingError = doThis;
             return this;

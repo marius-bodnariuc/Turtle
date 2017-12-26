@@ -25,10 +25,9 @@ namespace Turtle.ConsoleApp
                     break;
             }
             
-            var environment = new EnvironmentBuilder()
-                .From(environmentFile)
+            var environment = EnvironmentBuilder.From(environmentFile)
                 .OnIOError(DisplayExcMessageAndExit)
-                .OnParsingError(DisplayExpectedFormatAndExit)
+                .AndOnParsingError(DisplayExpectedFormatAndExit)
                 .Build();
 
             var commands = new MovesBuilder()
