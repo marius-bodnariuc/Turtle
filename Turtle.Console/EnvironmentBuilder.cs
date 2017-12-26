@@ -33,7 +33,7 @@ where:
             _path = path;
         }
 
-        public static BuilderFromFile<TurtleEnvironment> From(string path)
+        public static EnvironmentBuilder From(string path)
         {
             return new EnvironmentBuilder(path);
         }
