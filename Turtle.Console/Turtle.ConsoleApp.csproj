@@ -46,6 +46,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="EnvironmentBuilder.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Builder.cs" />
     <Compile Include="MovesBuilder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
