@@ -30,10 +30,9 @@ namespace Turtle.ConsoleApp
                 .AndOnParsingError(DisplayExpectedFormatAndExit)
                 .Build();
 
-            var commands = new MovesBuilder()
-                .From(movesFile)
+            var commands = MovesBuilder.From(movesFile)
                 .OnIOError(DisplayExcMessageAndExit)
-                .OnParsingError(DisplayExpectedFormatAndExit)
+                .AndOnParsingError(DisplayExpectedFormatAndExit)
                 .Build();
 
             var result = new Simulation(environment, commands).Run();

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Turtle.ConsoleApp
 {
-    class MovesBuilder
+    class MovesBuilder : Builder<TurtleCommandBatch>
     {
         public static readonly string MOVES_FILE_FORMAT = @"[command][command][command]...
 
@@ -14,30 +14,19 @@ R stands for Rotate";
 
         private string _path;
 
-        private Action<Exception> _onIoError;
-        private Action<Exception, string, string> _onParsingError;
-
         public MovesBuilder() { }
 
-        public MovesBuilder From(string path)
+        public MovesBuilder(string path)
         {
             _path = path;
-            return this;
         }
 
-        public MovesBuilder OnIOError(Action<Exception> doThis)
+        public static MovesBuilder From(string path)
         {
-            _onIoError = doThis;
-            return this;
+            return new MovesBuilder(path);
         }
 
-        public MovesBuilder OnParsingError(Action<Exception, string, string> doThis)
-        {
-            _onParsingError = doThis;
-            return this;
-        }
-
-        public TurtleCommandBatch Build()
+        public override TurtleCommandBatch Build()
         {
             try
             {
