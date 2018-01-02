@@ -24,14 +24,7 @@ where:
 [direction] is one of the following strings: North, South, East, West
 [mine_x] [mine_y] are integers representing the x and y coordinates of mines; there are as many such lines as there are mines";
 
-        private string _path;
-
-        private EnvironmentBuilder() { }
-
-        private EnvironmentBuilder(string path)
-        {
-            _path = path;
-        }
+        private EnvironmentBuilder(string path) : base(path) { }
 
         public static EnvironmentBuilder From(string path)
         {

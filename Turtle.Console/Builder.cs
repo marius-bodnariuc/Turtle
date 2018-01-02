@@ -40,8 +40,15 @@ namespace Turtle.ConsoleApp
         BuilderWithParsingErrorHandler<T>,
         BuilderWithIOAndParsingErrorHandler<T>
     {
+        protected string _path;
+
         protected Action<Exception> _onIoError;
         protected Action<Exception, string, string> _onParsingError;
+
+        protected Builder(string path)
+        {
+            _path = path;
+        }
 
         public BuilderWithIOErrorHandler<T> OnIOError(Action<Exception> doThis)
         {

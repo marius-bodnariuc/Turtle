@@ -12,14 +12,7 @@ where [command] is one of the following characters: M, R
 M stands for Move
 R stands for Rotate";
 
-        private string _path;
-
-        public MovesBuilder() { }
-
-        public MovesBuilder(string path)
-        {
-            _path = path;
-        }
+        public MovesBuilder(string path) : base(path) { }
 
         public static MovesBuilder From(string path)
         {
